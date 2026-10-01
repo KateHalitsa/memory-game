@@ -175,27 +175,11 @@ function updateCounter(count, whatCounter) {
 function showModal(type) {
   const modal = document.createElement('div');
   modal.classList.add('modal');
-
-  switch (type) {
-    case MODAL_WINNER: {
-      const overlay = document.createElement('div');
+const overlay = document.createElement('div');
       overlay.classList.add('modal__overlay');
 
       const content = document.createElement('div');
       content.classList.add('modal__content');
-
-      const title = document.createElement('h1');
-      title.textContent = 'You win!';
-
-      const moves = document.createElement('div');
-      moves.classList.add('moveCounter');
-      moves.textContent = 'Moves:';
-
-      const movesValue = document.createElement('span');
-      movesValue.textContent = String(moveCounter);
-
-      moves.append(movesValue);
-
       const choice = document.createElement('div');
       choice.classList.add('choice');
 
@@ -208,13 +192,25 @@ function showModal(type) {
       closeButton.textContent = 'Close';
 
       choice.append(newGameButton, closeButton);
+  switch (type) {
+    case MODAL_WINNER: {
+      
+      const title = document.createElement('h1');
+      title.textContent = 'You win!';
+
+      const moves = document.createElement('div');
+      moves.classList.add('moveCounter');
+      moves.textContent = 'Moves:';
+
+      const movesValue = document.createElement('span');
+      movesValue.textContent = String(moveCounter);
+
+      moves.append(movesValue);
+
+     
 
       content.append(title, moves, choice);
-      modal.append(overlay, content);
-
-      closeButton.addEventListener('click', () => {
-        modal.remove();
-      });
+      
 
       break;
     }
@@ -225,6 +221,18 @@ function showModal(type) {
     default:
       return;
   }
+      modal.append(overlay, content);
+      closeButton.addEventListener('click', () => {
+        modal.remove();
+      });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+              modal.remove();
+        }
+      });
+      const backdrop = modal.querySelector('.modal__overlay');
+
+      backdrop.addEventListener('click', ()=> modal.remove());
 
   main.append(modal);
 }
@@ -240,3 +248,5 @@ document.addEventListener('click', (event) => {
     startNewGame();
   }
 });
+
+
