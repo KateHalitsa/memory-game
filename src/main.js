@@ -1,39 +1,58 @@
-import './style.scss'
+import './style.scss';
 
-let moveСounter = 0;
-let pairСounter = 0;
+let moveCounter = 0;
+let pairCounter = 0;
 let selectedCards = [];
-let isChecking;
-const MODAL_WINNER="winner";
-const MODAL_TABLE="table";
+let isChecking = false;
 
-document.querySelector('#app').innerHTML = `
-<header>        <button class="newGame">New Game</button></header>
-<main>
-<section class="counters">
-<div class="moveСounter">Moves:<span>0</span></div>
-<div class="pairСounter">Pairs:<span>0</span>/8</div>
-</section>
-<section class="gameBoard" id="gameBoard"></section>
-</main>
-`
+const MODAL_WINNER = 'winner';
+const MODAL_TABLE = 'table';
 
-function startNewGame(){
-  moveСounter = 0;
-  pairСounter = 0;
-  selectedCards = [];
-  isChecking = false;
+const app = document.querySelector('#app');
 
-  updateСounter(moveСounter, '.moveСounter');
-  updateСounter(pairСounter, '.pairСounter');
-  addCards();
-  setListerners();
+const header = document.createElement('header');
 
-  const modal = document.querySelector('.modal');
-  if(modal){
-    modal.remove();
-  }
-}
+const newGameButton = document.createElement('button');
+newGameButton.classList.add('newGame');
+newGameButton.textContent = 'New Game';
+
+header.append(newGameButton);
+
+const main = document.createElement('main');
+
+const counters = document.createElement('section');
+counters.classList.add('counters');
+
+const moveCounterElement = document.createElement('div');
+moveCounterElement.classList.add('moveCounter');
+moveCounterElement.textContent = 'Moves:';
+
+const moveCounterValue = document.createElement('span');
+moveCounterValue.textContent = '0';
+
+moveCounterElement.append(moveCounterValue);
+
+const pairCounterElement = document.createElement('div');
+pairCounterElement.classList.add('pairCounter');
+pairCounterElement.textContent = 'Pairs:';
+
+const pairCounterValue = document.createElement('span');
+pairCounterValue.textContent = '0';
+
+pairCounterElement.append(pairCounterValue);
+
+pairCounterElement.append('/8');
+
+counters.append(moveCounterElement, pairCounterElement);
+
+const gameBoard = document.createElement('section');
+gameBoard.classList.add('gameBoard');
+gameBoard.id = 'gameBoard';
+
+main.append(counters, gameBoard);
+app.append(header, main);
+
+
 const images = Object.values(
   import.meta.glob('/src/assets/cards/*.png', {
     eager: true,
@@ -45,110 +64,175 @@ const images = Object.values(
 const imagesTwice = [...images, ...images];
 
 
-function addCards(){
-imagesTwice.sort(() => Math.random() - 0.5);
+function startNewGame() {
+  moveCounter = 0;
+  pairCounter = 0;
+  selectedCards = [];
+  isChecking = false;
 
-const cards = imagesTwice;
-const listElement = document.querySelector('.gameBoard');
+  updateCounter(moveCounter, '.moveCounter');
+  updateCounter(pairCounter, '.pairCounter');
 
-const htmlContent = cards.map((card,i)=> {
-            return `<div class="card close" data-image="${card}">
-                       <img class="card__image" src="${card}" alt="">
-                  </div>
-`;
-        }).join('');
-        
-            listElement.innerHTML = htmlContent;
+  addCards();
 
+  const modal = document.querySelector('.modal');
+
+  if (modal) {
+    modal.remove();
+  }
 }
-addCards();
-setListerners();
 
-function setListerners(){
-const cards = document.querySelectorAll('.card');
- isChecking=false;
-cards.forEach((card) => {
-  card.addEventListener('click', () => {
-    if (isChecking) {
-    return;
-    }
-    const hasNoClass = card.classList.contains('close');
-    if(!hasNoClass){
-        return;
-    }
-    if (selectedCards.length === 2 ) return;
 
-    card.classList.remove('close');
-    selectedCards.push(card);
+function addCards() {
+  imagesTwice.sort(() => Math.random() - 0.5);
 
-    if (selectedCards.length === 2) {
-      moveСounter++;
-      updateСounter(moveСounter,".moveСounter")
-      checkMatch();
-    }
+  gameBoard.replaceChildren();
+
+  imagesTwice.forEach((image) => {
+    const card = document.createElement('div');
+    card.classList.add('card', 'close');
+    card.dataset.image = image;
+
+    const cardImage = document.createElement('img');
+    cardImage.classList.add('card__image');
+    cardImage.src = image;
+    cardImage.alt = '';
+
+    card.append(cardImage);
+    gameBoard.append(card);
   });
-});
+
+  setListeners();
 }
+
+
+function setListeners() {
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach((card) => {
+    card.addEventListener('click', () => {
+      if (isChecking) {
+        return;
+      }
+
+      if (!card.classList.contains('close')) {
+        return;
+      }
+
+      if (selectedCards.length === 2) {
+        return;
+      }
+
+      card.classList.remove('close');
+      selectedCards.push(card);
+
+      if (selectedCards.length === 2) {
+        moveCounter++;
+
+        updateCounter(moveCounter, '.moveCounter');
+
+        checkMatch();
+      }
+    });
+  });
+}
+
 
 function checkMatch() {
   const [firstCard, secondCard] = selectedCards;
-  isChecking=true;
+
+  isChecking = true;
+
   setTimeout(() => {
+    if (firstCard.dataset.image === secondCard.dataset.image) {
+      pairCounter++;
 
-  if (firstCard.dataset.image === secondCard.dataset.image) {
-      pairСounter++;
-      updateСounter(pairСounter,".pairСounter")
-      if(pairСounter===8){
+      updateCounter(pairCounter, '.pairCounter');
+
+      if (pairCounter === 8) {
         showModal(MODAL_WINNER);
+      }
+    } else {
+      firstCard.classList.add('close');
+      secondCard.classList.add('close');
     }
-  } else {
-    firstCard.classList.add("close");
-    secondCard.classList.add("close");
+
+    selectedCards = [];
+    isChecking = false;
+  }, 1500);
+}
+
+
+function updateCounter(count, whatCounter) {
+  const counter = document.querySelector(`${whatCounter} span`);
+
+  if (counter) {
+    counter.textContent = String(count);
   }
-  isChecking=false;
-},1500)
-  selectedCards = [];
-  
 }
 
 
-function updateСounter(count, whatCounter){
-const сounter = document.querySelector(whatCounter+' span');
-сounter.textContent = String(count);
+function showModal(type) {
+  const modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  switch (type) {
+    case MODAL_WINNER: {
+      const overlay = document.createElement('div');
+      overlay.classList.add('modal__overlay');
+
+      const content = document.createElement('div');
+      content.classList.add('modal__content');
+
+      const title = document.createElement('h1');
+      title.textContent = 'You win!';
+
+      const moves = document.createElement('div');
+      moves.classList.add('moveCounter');
+      moves.textContent = 'Moves:';
+
+      const movesValue = document.createElement('span');
+      movesValue.textContent = String(moveCounter);
+
+      moves.append(movesValue);
+
+      const choice = document.createElement('div');
+      choice.classList.add('choice');
+
+      const newGameButton = document.createElement('button');
+      newGameButton.classList.add('newGame');
+      newGameButton.textContent = 'New Game';
+
+      const closeButton = document.createElement('button');
+      closeButton.classList.add('close');
+      closeButton.textContent = 'Close';
+
+      choice.append(newGameButton, closeButton);
+
+      content.append(title, moves, choice);
+      modal.append(overlay, content);
+
+      closeButton.addEventListener('click', () => {
+        modal.remove();
+      });
+
+      break;
+    }
+
+    case MODAL_TABLE:
+      break;
+
+    default:
+      return;
+  }
+
+  main.append(modal);
 }
 
-function showModal(type){
-const pairnt = document.querySelector('main');
-const modal = document.createElement('div');
-modal.classList.add("modal");
-switch(type){
-  case MODAL_WINNER:
-    modal.innerHTML=`
-    <div class="modal__overlay"></div>
-    <div class="modal__content" >
-        <h1>You win!</h1>
-        <div class="moveСounter">Moves:<span>${moveСounter}</span></div>
-        <div class="choice">
-        <button class="newGame">New Game</button>
-        <button class="close">Close</button>
-        </div>
-    </div>`
-        break;
-  case MODAL_TABLE:
-    //
-        break;
-  default:
-    return;
-}
-pairnt.append(modal);
-const closeButton = modal.querySelector('.close');
 
-  closeButton.addEventListener('click', () => {
-    modal.remove();
-  });
-  
-}
+newGameButton.addEventListener('click', startNewGame);
 
+addCards();
 document.addEventListener('click', (event) => {
   const target = event.target;
 
