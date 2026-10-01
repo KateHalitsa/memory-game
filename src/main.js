@@ -1,8 +1,14 @@
 import './style.scss'
 
+let moveСounter = 0;
+let pareСounter = 0;
 document.querySelector('#app').innerHTML = `
 <header></header>
 <main>
+<section class="counters">
+<div class="moveСounter">Moves:<span>0</span></div>
+<div class="pareСounter">Pares:<span>0</span>/8</div>
+</section>
 <section class="gameBoard" id="gameBoard"></section>
 </main>
 `
@@ -49,6 +55,8 @@ cards.forEach((card) => {
     selectedCards.push(card);
 
     if (selectedCards.length === 2) {
+      moveСounter++;
+      updateСounter(moveСounter,".moveСounter")
       checkMatch();
     }
   });
@@ -56,16 +64,22 @@ cards.forEach((card) => {
 function checkMatch() {
   const [firstCard, secondCard] = selectedCards;
   isCheacking=true;
-  if (firstCard.dataset.image === secondCard.dataset.image) {
-   //
-  } else {
-    setTimeout(() => {
+  setTimeout(() => {
 
+  if (firstCard.dataset.image === secondCard.dataset.image) {
+      pareСounter++;
+      updateСounter(pareСounter,".pareСounter")
+  } else {
     firstCard.classList.add("close");
     secondCard.classList.add("close");
-    isCheacking=false;
-    },1500)
   }
-
+  isCheacking=false;
+},1500)
   selectedCards = [];
+}
+
+
+function updateСounter(count, whatCounter){
+const сounter = document.querySelector(whatCounter+' span');
+сounter.textContent = String(count);
 }
