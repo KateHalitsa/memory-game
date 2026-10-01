@@ -141,6 +141,12 @@ switch(type){
     return;
 }
 pairnt.append(modal);
+const closeButton = modal.querySelector('.close');
+
+  closeButton.addEventListener('click', () => {
+    modal.remove();
+  });
+  
 }
 
 document.addEventListener('click', (event) => {
