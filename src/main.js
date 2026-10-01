@@ -33,10 +33,17 @@ const htmlContent = cards.map((card,i)=> {
 addCards();
 let selectedCards = [];
 const cards = document.querySelectorAll('.card');
-
+let isCheacking=false;
 cards.forEach((card) => {
   card.addEventListener('click', () => {
-    if (selectedCards.length === 2) return;
+    if (isCheacking) {
+    return;
+    }
+    const hasNoClass = card.classList.contains('close');
+    if(!hasNoClass){
+        return;
+    }
+    if (selectedCards.length === 2 ) return;
 
     card.classList.remove('close');
     selectedCards.push(card);
@@ -48,14 +55,16 @@ cards.forEach((card) => {
 });
 function checkMatch() {
   const [firstCard, secondCard] = selectedCards;
-
+  isCheacking=true;
   if (firstCard.dataset.image === secondCard.dataset.image) {
    //
   } else {
     setTimeout(() => {
 
     firstCard.classList.add("close");
-    secondCard.classList.add("close");},1500)
+    secondCard.classList.add("close");
+    isCheacking=false;
+    },1500)
   }
 
   selectedCards = [];
