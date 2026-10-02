@@ -8,6 +8,10 @@ let isChecking = false;
 const MODAL_WINNER = 'winner';
 const MODAL_TABLE = 'table';
 
+const key="game_history"
+let currentStorage;
+let resultTable;
+
 const app = document.querySelector('#app');
 
 const header = document.createElement('header');
@@ -16,7 +20,11 @@ const newGameButton = document.createElement('button');
 newGameButton.classList.add('newGame');
 newGameButton.textContent = 'New Game';
 
-header.append(newGameButton);
+const resultTableButton = document.createElement('button');
+resultTableButton.classList.add('result-table');
+resultTableButton.textContent = 'Results';
+
+header.append(newGameButton,resultTableButton);
 
 const main = document.createElement('main');
 
@@ -74,6 +82,7 @@ function startNewGame() {
   updateCounter(pairCounter, '.pairCounter');
 
   addCards();
+  getResults();
 
   const modal = document.querySelector('.modal');
 
@@ -150,6 +159,7 @@ function checkMatch() {
       updateCounter(pairCounter, '.pairCounter');
 
       if (pairCounter === 8) {
+        saveUniqueGameObject({date: new Date().toLocaleDateString('ru-RU'),moves: moveCounter});
         showModal(MODAL_WINNER);
       }
     } else {
@@ -192,6 +202,7 @@ const overlay = document.createElement('div');
       closeButton.textContent = 'Close';
 
       choice.append(newGameButton, closeButton);
+      
   switch (type) {
     case MODAL_WINNER: {
       
@@ -207,20 +218,46 @@ const overlay = document.createElement('div');
 
       moves.append(movesValue);
 
-     
-
       content.append(title, moves, choice);
       
-
       break;
     }
 
     case MODAL_TABLE:
-      break;
+      {
+        const title = document.createElement('h1');
+      title.textContent = 'Top 10 results';
+      getResults();
+      if(resultTable.length>0){
+        
+      const table = document.createElement('table');
+      table.classList.add('results');
 
+      resultTable.forEach((result,i)=>{
+        const tr = document.createElement('tr');
+        const td= document.createElement('td');
+        td.textContent=i+1;
+        const td1= document.createElement('td');
+        td1.textContent=result.date;
+        const td2 = document.createElement('td');
+        td2.textContent=result.moves;
+        tr.append(td,td1,td2);
+        table.append(tr);
+      });
+      content.append(title,table);
+
+      }else{
+        const p = document.createElement('p');
+        p.textContent="There's no results yet";
+        content.append(title,p);
+      }
+
+      break;
+      }
     default:
       return;
-  }
+  }      content.append( choice);
+
       modal.append(overlay, content);
       closeButton.addEventListener('click', () => {
         modal.remove();
@@ -239,8 +276,11 @@ const overlay = document.createElement('div');
 
 
 newGameButton.addEventListener('click', startNewGame);
+resultTableButton.addEventListener('click', ()=>showModal(MODAL_TABLE));
 
 addCards();
+getResults();
+
 document.addEventListener('click', (event) => {
   const target = event.target;
 
@@ -248,5 +288,25 @@ document.addEventListener('click', (event) => {
     startNewGame();
   }
 });
+function getResults(){
+ currentStorage = localStorage.getItem(key);
+ resultTable = currentStorage ? JSON.parse(currentStorage) : [];
+}
 
+const saveUniqueGameObject = (newResult) => {
+  
+  const isDuplicate = resultTable.some(
+    item => item.date === newResult.date && item.moves === newResult.moves
+  );
 
+  if (isDuplicate) {
+    return; 
+  }
+
+  resultTable.push(newResult);
+
+  resultTable.sort((a, b) => {return a.moves - b.moves||a.date - b.date});
+
+  const limitedList = resultTable.slice(0, 10);
+  localStorage.setItem(key, JSON.stringify(limitedList));
+};
