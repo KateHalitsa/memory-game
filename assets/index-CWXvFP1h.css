@@ -1,0 +1,239 @@
+@charset "UTF-8";
+
+.gameBoard {
+  aspect-ratio: 4/3;
+  background-image: url(/memory-game/assets/backgrounds-B58RFQJy.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+}
+
+.card {
+  width: 60%;
+  aspect-ratio: 1/1;
+  background-image: url(/memory-game/assets/memory_erasure-84ZT5820.jpg);
+  background-size: 180%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 70px;
+}
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
+  visibility: visible;
+}
+.card.close img {
+  visibility: hidden;
+}
+
+.counters {
+  width: 300px;
+  height: 50px;
+  color: #4a3611;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #5e2c16 0%, #8f5615 10%, #d9995b 35%, #f2c696 55%, #d9995b 65%, #8f5615 95%, #5e2c16 100%);
+  border: 1px solid #73371b;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.modal__overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal__content {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+table {
+  width: 80%;
+}
+table td:nth-child(1) {
+  width: 20px;
+}
+@font-face {
+  font-family: "Magic";
+  src: url("/memory-game/assets/Magic%20Retro-7xOhxlKQ.ttf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #f69423;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --sans: 'Magic',sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@media (max-width: 1024px) {
+  :root {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+}
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+}
+@media (max-width: 1024px) {
+  h2 {
+    font-size: 20px;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  text-align: center;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  align-content: center;
+}
+
+body {
+  background-image: url(/memory-game/assets/background-Dh86Cvr6.jpg);
+  background-size: 110% 100%;
+  background-position: calc(50% + 30px) center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  gap: 10px;
+  transform: translate(0px, -50px);
+}
+
+button {
+  font: 18px/145% var(--sans);
+  background-color: rgba(246, 148, 35, 0.5803921569);
+  color: #fff;
+  width: 150px;
+  font-size: 20px;
+  border-radius: 20px;
+  border-style: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* для Safari */
+  /* Тонкая полупрозрачная рамка для объема */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* Мягкая тень */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+header {
+  /*position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+
+  */
+  padding: 15px;
+}
