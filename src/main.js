@@ -271,7 +271,7 @@ const overlay = document.createElement('div');
 
       backdrop.addEventListener('click', ()=> modal.remove());
 
-  main.append(modal);
+  app.append(modal);
 }
 
 

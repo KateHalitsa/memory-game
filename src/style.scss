@@ -1,6 +1,11 @@
 @import url(../src/styles/gameBoard.scss);
 @import url(../src/styles/modal.scss);
-
+@font-face {
+  font-family: 'Magic';
+  src: url('../src/assets/font/Magic\ Retro.ttf') format('opentype');
+  font-style: normal; 
+  font-display: swap;
+}
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -14,7 +19,7 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Magic',sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
@@ -59,7 +64,7 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family: var(--sans);
   font-weight: 500;
   color: var(--text-h);
 }
@@ -89,20 +94,58 @@ p {
 
 
 #app {
-  width: 1126px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
   text-align: center;
-  //border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   align-content: center;
 }
+body{
+      background-image: url(./assets/decore/background.jpg);
+      background-size: 110% 100% ;
+      background-position: calc(50% + 30px) center;
+    background-repeat: no-repeat;
+      overflow: hidden;
+
+}
 main{
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   align-items: center;
+  width: 80%;
+  margin: auto;
+  gap: 10px;
+  transform: translate(0px, -50px);
+}
+button{
+    font: 18px/145% var(--sans);
+    background-color: #f6942394;
+  color: #fff;
+  width: 150px;
+  font-size: 20px;
+  border-radius:20px;
+  border-style: none;
+
+   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* для Safari */
+  
+  /* Тонкая полупрозрачная рамка для объема */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  
+  /* Мягкая тень */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+header{
+  /*position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  
+  */
+  padding: 15px;
+  //top: 5%;
 }
