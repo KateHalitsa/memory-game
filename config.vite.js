@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/memory-game/',
+  base: './',
   build: {
     sourcemap: true,
     minify: false,
