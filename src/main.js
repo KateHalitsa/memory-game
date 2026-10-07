@@ -12,7 +12,10 @@ const key="game_history"
 let currentStorage;
 let resultTable;
 
-const app = document.querySelector('#app');
+const body = document.querySelector('body');
+
+const app = document.createElement('div');
+app.id="app";
 
 const header = document.createElement('header');
 
@@ -60,7 +63,7 @@ gameBoard.id = 'gameBoard';
 main.append(counters, gameBoard);
 app.append(header, main);
 
-
+body.append(app);
 const images = Object.values(
   import.meta.glob('/src/assets/cards/*.png', {
     eager: true,
