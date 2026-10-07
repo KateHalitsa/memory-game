@@ -16,6 +16,7 @@ const body = document.querySelector('body');
 
 const app = document.createElement('div');
 app.id="app";
+body.append(app);
 
 const header = document.createElement('header');
 
@@ -63,7 +64,6 @@ gameBoard.id = 'gameBoard';
 main.append(counters, gameBoard);
 app.append(header, main);
 
-body.append(app);
 const images = Object.values(
   import.meta.glob('/src/assets/cards/*.png', {
     eager: true,
