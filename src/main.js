@@ -12,11 +12,11 @@ const key="game_history"
 let currentStorage;
 let resultTable;
 
-const body = document.querySelector('body');
+const body = document.body;
 
 const app = document.createElement('div');
 app.id="app";
-body.append(app);
+body.prepend(app);
 
 const header = document.createElement('header');
 
